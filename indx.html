@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>کلمه‌ یاب ۶ حرفی</title>
+<style>
+  body{margin:0;background:#121213;color:#fff;font-family:Tahoma,sans-serif;
+       display:flex;flex-direction:column;align-items:center;min-height:100vh}
+  h1{font-size:20px;margin:12px 0 4px}
+  #msg{height:22px;color:#ffd54f;font-size:14px}
+  #board{display:grid;grid-template-rows:repeat(6,1fr);gap:5px;margin:8px 0}
+  .row{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}
+  .cell{width:48px;height:48px;border:2px solid #3a3a3c;display:flex;
+        align-items:center;justify-content:center;font-size:24px;font-weight:bold}
+  .cell.f{border-color:#818384}
+  .g{background:#538d4e;border-color:#538d4e}
+  .y{background:#b59f3b;border-color:#b59f3b}
+  .x{background:#3a3a3c;border-color:#3a3a3c}
+  #kb{display:flex;flex-direction:column;gap:6px;margin:10px 4px;width:100%;max-width:500px}
+  .kr{display:flex;justify-content:center;gap:4px}
+  .k{flex:1;max-width:40px;height:50px;border:0;border-radius:5px;background:#818384;
+     color:#fff;font-size:16px;font-family:inherit}
+  .k.wide{max-width:70px;font-size:13px}
+  button#new{margin:8px;padding:8px 16px;border:0;border-radius:6px;background:#538d4e;color:#fff;font-family:inherit}
+</style>
+</head>
+<body>
+<h1>کلمه‌ یاب ۶ حرفی</h1>
+<div id="msg"></div>
+<div id="board"></div>
+<div id="kb"></div>
+<button id="new">بازی جدید</button>
+
+<script>
+// ✏️ لیست کلمات رو خودت هرچقدر خواستی زیاد کن (فقط ۶ حرفی، بدون نیم‌فاصله)
+const WORDS = `مسافرت سرگرمی مهمانی دوستان خورشید دریاچه زمستان بهاران معلمان دانشجو خیابان مسابقه
+بازیگر برنامه کشاورز آزمایش سلامتی دلتنگی مهربان زیبایی بیابان پیراهن دستمال شیرینی پرتقال
+زردآلو عنکبوت شترمرغ پرستار فوتبال موبایل خاطرات خودکار دفترچه پادشاه سربازی قهرمان دشمنان
+پیروزی مبارزه انسانی تنهایی خوشبخت امروزی مهندسی کهکشان موسیقی خوشحال ناراحت عصبانی
+مشکلات پیشرفت موفقیت امتحان نوجوان بزرگان کودکان همسایه شهروند پایتخت جمهوری انتخاب
+پیشانی انگشتر`.split(/\s+/).filter(w=>[...w].length===6);
+
+const ROWS=["ضصثقفغعهخحجچ","شسیبلاتنمکگ","ظطزرذدپوژآ"];
+const N=6, T=6;
+let ans, cur, row, over, keyState;
+
+const $=id=>document.getElementById(id);
+const norm=c=>c==='ي'?'ی':c==='ك'?'ک':c;
+
+function build(){
+  $('board').innerHTML='';
+  for(let r=0;r<T;r++){
+    const d=document.createElement('div');d.className='row';
+    for(let c=0;c<N;c++){const e=document.createElement('div');e.className='cell';d.appendChild(e)}
+    $('board').appendChild(d);
+  }
+  $('kb').innerHTML='';
+  ROWS.forEach((r,i)=>{
+    const d=document.createElement('div');d.className='kr';
+    if(i===2){d.appendChild(btn('ثبت','wide',submit))}
+    [...r].forEach(ch=>d.appendChild(btn(ch,'',()=>type(ch))));
+    if(i===2){d.appendChild(btn('حذف','wide',back))}
+    $('kb').appendChild(d);
+  });
+}
+function btn(t,cls,fn){const b=document.createElement('button');b.className='k '+cls;b.textContent=t;b.dataset.l=t;b.onclick=fn;return b}
+
+function start(){
+  ans=[...WORDS[Math.floor(Math.random()*WORDS.length)]];
+  cur=[];row=0;over=false;keyState={};
+  build();msg('');
+}
+function msg(t){$('msg').textContent=t}
+function cells(){return $('board').children[row].children}
+function type(ch){
+  if(over||cur.length>=N)return;
+  cur.push(ch);draw();
+}
+function back(){if(over)return;cur.pop();draw()}
+function draw(){
+  const cs=cells();
+  for(let i=0;i<N;i++){cs[i].textContent=cur[i]||'';cs[i].classList.toggle('f',!!cur[i])}
+}
+function score(g){
+  const res=Array(N).fill('x'), left={};
+  for(let i=0;i<N;i++){
+    if(g[i]===ans[i])res[i]='g';else left[ans[i]]=(left[ans[i]]||0)+1;
+  }
+  for(let i=0;i<N;i++){
+    if(res[i]==='g')continue;
+    if(left[g[i]]>0){res[i]='y';left[g[i]]--}
+  }
+  return res;
+}
+function submit(){
+  if(over)return;
+  if(cur.length<N){msg('کلمه باید ۶ حرف باشه!');return}
+  const res=score(cur), cs=cells(), pr={x:1,y:2,g:3};
+  res.forEach((s,i)=>{
+    cs[i].classList.add(s);
+    const l=cur[i];
+    if(!keyState[l]||pr[s]>pr[keyState[l]])keyState[l]=s;
+  });
+  document.querySelectorAll('.k').forEach(b=>{
+    const s=keyState[b.dataset.l];
+    if(s){b.style.background={g:'#538d4e',y:'#b59f3b',x:'#3a3a3c'}[s]}
+  });
+  if(res.every(s=>s==='g')){msg('🎉 آفرین! درست زدی');over=true;return}
+  row++;cur=[];
+  if(row>=T){msg('باختی! کلمه: '+ans.join(''));over=true}
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter')submit();
+  else if(e.key==='Backspace')back();
+  else{const c=norm(e.key);if(ROWS.join('').includes(c))type(c)}
+});
+$('new').onclick=start;
+start();
+</script>
+</body>
+</html>
