@@ -3,46 +3,61 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>کلمه‌ یاب ۶ حرفی</title>
+<title>کلمه‌ یاب ۵ حرفی</title>
 <style>
   body{margin:0;background:#121213;color:#fff;font-family:Tahoma,sans-serif;
        display:flex;flex-direction:column;align-items:center;min-height:100vh}
-  h1{font-size:20px;margin:12px 0 4px}
-  #msg{height:22px;color:#ffd54f;font-size:14px}
-  #board{display:grid;grid-template-rows:repeat(6,1fr);gap:5px;margin:8px 0}
-  .row{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}
-  .cell{width:48px;height:48px;border:2px solid #3a3a3c;display:flex;
-        align-items:center;justify-content:center;font-size:24px;font-weight:bold}
+  #top{display:flex;align-items:center;justify-content:space-between;
+       width:100%;max-width:500px;padding:10px 12px;box-sizing:border-box}
+  h1{font-size:20px;margin:0}
+  #new{padding:9px 16px;border:0;border-radius:8px;background:#d32f2f;color:#fff;
+       font-family:inherit;font-size:14px;font-weight:bold}
+  #msg{height:22px;color:#ffd54f;font-size:14px;margin:2px 0}
+  #board{display:grid;gap:5px;margin:8px 0}
+  .row{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+  .cell{width:56px;height:56px;border:2px solid #3a3a3c;display:flex;
+        align-items:center;justify-content:center;font-size:26px;font-weight:bold}
   .cell.f{border-color:#818384}
   .g{background:#538d4e;border-color:#538d4e}
   .y{background:#b59f3b;border-color:#b59f3b}
   .x{background:#3a3a3c;border-color:#3a3a3c}
-  #kb{display:flex;flex-direction:column;gap:6px;margin:10px 4px;width:100%;max-width:500px}
+  #kb{display:flex;flex-direction:column;gap:6px;margin:10px 4px 4px;width:100%;max-width:500px}
   .kr{display:flex;justify-content:center;gap:4px}
   .k{flex:1;max-width:40px;height:50px;border:0;border-radius:5px;background:#818384;
      color:#fff;font-size:16px;font-family:inherit}
-  .k.wide{max-width:70px;font-size:13px}
-  button#new{margin:8px;padding:8px 16px;border:0;border-radius:6px;background:#538d4e;color:#fff;font-family:inherit}
+  .k.wide{max-width:70px;font-size:13px;background:#6b6b6d}
+  #submit{width:calc(100% - 16px);max-width:484px;height:60px;margin:6px 8px 20px;border:0;
+          border-radius:10px;background:#2e9e3f;color:#fff;font-size:22px;font-weight:bold;
+          font-family:inherit}
+  #submit:active{background:#237a30}
 </style>
 </head>
 <body>
-<h1>کلمه‌ یاب ۶ حرفی</h1>
+<div id="top">
+  <h1>کلمه‌ یاب ۵ حرفی</h1>
+  <button id="new">بازی جدید</button>
+</div>
 <div id="msg"></div>
 <div id="board"></div>
 <div id="kb"></div>
-<button id="new">بازی جدید</button>
+<button id="submit">ثبت</button>
 
 <script>
-// ✏️ لیست کلمات رو خودت هرچقدر خواستی زیاد کن (فقط ۶ حرفی، بدون نیم‌فاصله)
-const WORDS = `مسافرت سرگرمی مهمانی دوستان خورشید دریاچه زمستان بهاران معلمان دانشجو خیابان مسابقه
-بازیگر برنامه کشاورز آزمایش سلامتی دلتنگی مهربان زیبایی بیابان پیراهن دستمال شیرینی پرتقال
-زردآلو عنکبوت شترمرغ پرستار فوتبال موبایل خاطرات خودکار دفترچه پادشاه سربازی قهرمان دشمنان
-پیروزی مبارزه انسانی تنهایی خوشبخت امروزی مهندسی کهکشان موسیقی خوشحال ناراحت عصبانی
-مشکلات پیشرفت موفقیت امتحان نوجوان بزرگان کودکان همسایه شهروند پایتخت جمهوری انتخاب
-پیشانی انگشتر`.split(/\s+/).filter(w=>[...w].length===6);
+// ✏️ هرچقدر خواستی کلمه اضافه کن (فقط ۵ حرفی، بدون نیم‌فاصله، با ک و ی فارسی)
+const WORDS = [...new Set(`
+مدرسه پنجره آسمان ستاره باران پاییز گلدان پرنده کبوتر گنجشک خرگوش کرگدن زرافه میمون دلفین
+مرغابی پروانه زنبور مورچه سنجاب خرچنگ شاگرد تکلیف بازار ماشین موتور رایانه برنامه عکاسی
+نقاشی ترانه سینما نمایش دویدن پرواز قورمه انگور خربزه شیرین شکلات بستنی مهمان فرزند برادر
+خواهر همکار بیمار آمپول درمان سلامت غمگین سنگین تاریک ارزان آهسته کوتاه باریک راهنما دیوار
+تقویم شلوار جوراب دستکش عروسی مسافر آبشار جزیره طوفان زلزله سیاره سرباز پیروز آزادی عدالت
+حقیقت راستی خاطره یادگار دلتنگ معشوق داستان مشتری کارگر مهندس معمار آهنگر خلبان ملوان
+پژوهش آزمون آموزش فرهنگ تاریخ ریاضی فیزیک پزشکی هنرمند طراحی خوشبو باغچه ایوان صندلی
+سماور بشقاب چنگال لیوان یخچال رادیو شطرنج جایزه کوشش صبوری شکیبا دلاور آزاده عزیزم
+کتابچه دوچرخ سفیدی سیاهی قرمزی سبزه‌
+`.split(/\s+/))].filter(w=>[...w].length===5);
 
 const ROWS=["ضصثقفغعهخحجچ","شسیبلاتنمکگ","ظطزرذدپوژآ"];
-const N=6, T=6;
+const N=5, T=6;
 let ans, cur, row, over, keyState;
 
 const $=id=>document.getElementById(id);
@@ -58,7 +73,6 @@ function build(){
   $('kb').innerHTML='';
   ROWS.forEach((r,i)=>{
     const d=document.createElement('div');d.className='kr';
-    if(i===2){d.appendChild(btn('ثبت','wide',submit))}
     [...r].forEach(ch=>d.appendChild(btn(ch,'',()=>type(ch))));
     if(i===2){d.appendChild(btn('حذف','wide',back))}
     $('kb').appendChild(d);
@@ -95,7 +109,7 @@ function score(g){
 }
 function submit(){
   if(over)return;
-  if(cur.length<N){msg('کلمه باید ۶ حرف باشه!');return}
+  if(cur.length<N){msg('کلمه باید ۵ حرف باشه!');return}
   const res=score(cur), cs=cells(), pr={x:1,y:2,g:3};
   res.forEach((s,i)=>{
     cs[i].classList.add(s);
@@ -116,6 +130,7 @@ document.addEventListener('keydown',e=>{
   else{const c=norm(e.key);if(ROWS.join('').includes(c))type(c)}
 });
 $('new').onclick=start;
+$('submit').onclick=submit;
 start();
 </script>
 </body>
