@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1d1b3a" id="tc">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>کلمه‌یاب ۵ حرفی</title>
+<script>
+(function(){var t='dark';try{t=localStorage.getItem('wf5theme')||'dark'}catch(e){}
+document.documentElement.setAttribute('data-theme',t);})();
+</script>
+<style>
+  :root,[data-theme="dark"]{
+    --bg:linear-gradient(160deg,#2a1d40 0%,#1d1b3a 50%,#14293b 100%);
+    --ink:#ece6ff;--line:#4a4270;--focus:#8d7fc4;
+    --green:#7fd8b0;--yellow:#f0d878;--gray:#38334f;--on-g:#16301f;--on-y:#3a2f00;
+    --cell:#ffffff0d;--chip:#ffffff14;--chipsh:#00000033;
+    --key:#3d3766;--keysh:#27233f;--keyw:#2f2a52;--kx:#211e36;--kxink:#6f6890;
+    --msg:#ffb3d1;--sub:#7fd8b0;--subsh:#4fb97d;--subink:#12301f;
+  }
+  [data-theme="light"]{
+    --bg:linear-gradient(160deg,#ffe3ee 0%,#e9e3ff 50%,#d9f3ff 100%);
+    --ink:#5b4b8a;--line:#d8cdf0;--focus:#b7a4e6;
+    --green:#a8e6cf;--yellow:#ffefa0;--gray:#dcd8ea;--on-g:#1c4a33;--on-y:#5a4a00;
+    --cell:#ffffffcc;--chip:#ffffffb8;--chipsh:#b9a9e033;
+    --key:#ffffff;--keysh:#cfc3ee;--keyw:#f3ecff;--kx:#dcd8ea;--kxink:#9a93b5;
+    --msg:#b0558a;--sub:#6fd69c;--subsh:#4fb97d;--subink:#ffffff;
+  }
+  :root{--s:min(60px,calc((100vw - 56px)/5),calc((100dvh - 330px)/6))}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;margin:0}
+  body{color:var(--ink);font-family:Tahoma,sans-serif;background:var(--bg);
+       display:flex;justify-content:center;overflow:hidden}
+  #app{width:100%;max-width:480px;height:100dvh;display:flex;flex-direction:column;
+       padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
+  #top{display:flex;align-items:center;gap:8px;padding:2px 4px}
+  h1{font-size:18px;margin:0;margin-left:auto}
+  #theme{width:36px;height:34px;border:0;border-radius:12px;background:var(--chip);font-size:17px;
+         box-shadow:0 2px 6px var(--chipsh);padding:0}
+  #new{padding:7px 14px;border:0;border-radius:12px;background:#f67b8c;color:#fff;
+       font-family:inherit;font-weight:bold;font-size:13px;box-shadow:0 3px 0 #d95f70}
+  #new:active{transform:translateY(2px);box-shadow:0 1px 0 #d95f70}
+  #stats{display:grid;grid-template-columns:1fr 1fr 1fr 1.7fr;gap:6px;margin-top:8px}
+  .chip,#hint{height:36px;display:flex;align-items:center;justify-content:center;border-radius:12px;
+        font-family:inherit;font-size:13px;font-weight:bold;border:0;white-space:nowrap;padding:0 4px}
+  .chip{background:var(--chip);box-shadow:0 2px 6px var(--chipsh)}
+  #hint{background:#ffe08a;color:#7a5b00;box-shadow:0 3px 0 #e0bf5c}
+  #hint:disabled{opacity:.45;box-shadow:none}
+  #msg{height:22px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:bold;color:var(--msg)}
+  #boardwrap{flex:1;display:flex;align-items:center;justify-content:center;min-height:0}
+  #board{display:grid;gap:6px}
+  .row{display:grid;grid-template-columns:repeat(5,var(--s));gap:6px}
+  .row.shake{animation:shake .4s}
+  @keyframes shake{25%{transform:translateX(7px)}50%{transform:translateX(-7px)}75%{transform:translateX(5px)}}
+  .cell{width:var(--s);height:var(--s);border:2px solid var(--line);border-radius:14px;background:var(--cell);
+        display:flex;align-items:center;justify-content:center;font-size:calc(var(--s)*.46);font-weight:bold}
+  .cell.f{border-color:var(--focus);animation:pop .12s}
+  @keyframes pop{50%{transform:scale(1.1)}}
+  .cell.g{background:var(--green);border-color:var(--green);color:var(--on-g)}
+  .cell.y{background:var(--yellow);border-color:var(--yellow);color:var(--on-y)}
+  .cell.x{background:var(--gray);border-color:var(--gray)}
+  #kb{display:flex;flex-direction:column;gap:5px}
+  .kr{display:flex;justify-content:center;gap:4px}
+  .k{flex:1;min-width:0;max-width:40px;height:44px;border:0;border-radius:9px;background:var(--key);
+     color:var(--ink);font-size:16px;font-family:inherit;box-shadow:0 2px 0 var(--keysh);padding:0}
+  .k:active{transform:translateY(1px)}
+  .k.wide{max-width:60px;font-size:12px;background:var(--keyw)}
+  .k.kg{background:var(--green);color:var(--on-g)} .k.ky{background:var(--yellow);color:var(--on-y)}
+  .k.kx{background:var(--kx);color:var(--kxink)}
+  #submit{width:100%;height:54px;margin-top:8px;border:0;border-radius:16px;background:var(--sub);color:var(--subink);
+          font-size:21px;font-weight:bold;font-family:inherit;box-shadow:0 4px 0 var(--subsh)}
+  #submit:active{transform:translateY(3px);box-shadow:0 1px 0 var(--subsh)}
+  .star-pop{animation:sp .6s}
+  @keyframes sp{50%{transform:scale(1.25)}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="top">
+    <h1>🌸 کلمه‌یاب ۵ حرفی</h1>
+    <button id="theme" title="تغییر تم">🌙</button>
+    <button id="new">بازی جدید</button>
+  </div>
+  <div id="stats">
+    <div class="chip" id="stars">⭐ ۰</div>
+    <div class="chip" id="solved">✅ ۰</div>
+    <div class="chip" id="streak">🔥 ۰</div>
+    <button id="hint">💡 راهنمایی (۵⭐)</button>
+  </div>
+  <div id="msg"></div>
+  <div id="boardwrap"><div id="board"></div></div>
+  <div id="kb"></div>
+  <button id="submit">ثبت</button>
+</div>
+
+<script src="words.js"></script>
+<script src="answers.js"></script>
+<script>
+const LETTERS="ضصثقفغعهخحجچشسیبلاتنمکگظطزرذدپوژآ";
+const ROWS=["ضصثقفغعهخحجچ","شسیبلاتنمکگ","ظطزرذدپوژآ"];
+const N=5,T=6;
+const norm=c=>c==='ي'?'ی':c==='ك'?'ک':c;
+const parse=s=>s.split(/\s+/).map(w=>[...w].map(norm).join(''))
+  .filter(w=>[...w].length===N&&[...w].every(c=>LETTERS.includes(c)));
+const ANS=[...new Set(parse(ANSWERS_LIST))];
+// حدس‌ها: لغت‌نامه‌ی بزرگ (words.js) + همه‌ی جواب‌ها
+const VALID=new Set([...parse(typeof LEXICON==='string'?LEXICON:''),...ANS]);
+
+const $=id=>document.getElementById(id);
+const fa=n=>String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d]);
+
+/* ---------- ذخیره ---------- */
+let save={stars:0,solved:0,streak:0,best:0};
+try{const s=JSON.parse(localStorage.getItem('wf5'));if(s)save=Object.assign(save,s)}catch(e){}
+const persist=()=>{try{localStorage.setItem('wf5',JSON.stringify(save))}catch(e){}};
+
+/* ---------- تم ---------- */
+function setTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  $('theme').textContent=t==='dark'?'🌙':'☀️';
+  $('tc').setAttribute('content',t==='dark'?'#1d1b3a':'#e9e3ff');
+  try{localStorage.setItem('wf5theme',t)}catch(e){}
+}
+$('theme').onclick=()=>setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');
+setTheme(document.documentElement.getAttribute('data-theme')||'dark');
+
+function showStats(pop){
+  $('stars').textContent='⭐ '+fa(save.stars);
+  $('solved').textContent='✅ '+fa(save.solved);
+  $('streak').textContent='🔥 '+fa(save.streak);
+  $('streak').title='رکورد: '+fa(save.best);
+  $('hint').disabled=over||save.stars<5;
+  if(pop){$('stars').classList.remove('star-pop');void $('stars').offsetWidth;$('stars').classList.add('star-pop')}
+}
+
+let ans,cur,row,over=true,keyState,bag=[];
+function nextWord(){
+  if(!bag.length){bag=[...ANS];for(let i=bag.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[bag[i],bag[j]]=[bag[j],bag[i]]}}
+  return bag.pop();
+}
+function btn(t,cls,fn){const b=document.createElement('button');b.className='k '+cls;b.textContent=t;b.dataset.l=t;b.onclick=fn;return b}
+function build(){
+  $('board').innerHTML='';
+  for(let r=0;r<T;r++){
+    const d=document.createElement('div');d.className='row';
+    for(let c=0;c<N;c++){const e=document.createElement('div');e.className='cell';d.appendChild(e)}
+    $('board').appendChild(d);
+  }
+  $('kb').innerHTML='';
+  ROWS.forEach((r,i)=>{
+    const d=document.createElement('div');d.className='kr';
+    [...r].forEach(ch=>d.appendChild(btn(ch,'',()=>type(ch))));
+    if(i===2)d.appendChild(btn('حذف','wide',back));
+    $('kb').appendChild(d);
+  });
+}
+function start(){
+  // اگه وسط بازی (بعد از حداقل یه حدس) دکمه‌ی بازی جدید بزنی، حساب می‌شه باخت و ردیف برد صفر می‌شه
+  if(!over&&row>0&&save.streak>0){save.streak=0;persist()}
+  ans=[...nextWord()];cur=[];row=0;over=false;keyState={};
+  build();msg('');$('submit').textContent='ثبت';showStats();
+}
+const msg=t=>$('msg').textContent=t;
+const cells=()=>$('board').children[row].children;
+function type(ch){if(over||cur.length>=N)return;cur.push(ch);draw()}
+function back(){if(over)return;cur.pop();draw()}
+function draw(){const cs=cells();for(let i=0;i<N;i++){cs[i].textContent=cur[i]||'';cs[i].classList.toggle('f',!!cur[i])}}
+function score(g){
+  const res=Array(N).fill('x'),left={};
+  for(let i=0;i<N;i++){if(g[i]===ans[i])res[i]='g';else left[ans[i]]=(left[ans[i]]||0)+1}
+  for(let i=0;i<N;i++){if(res[i]==='g')continue;if(left[g[i]]>0){res[i]='y';left[g[i]]--}}
+  return res;
+}
+function paintKeys(){document.querySelectorAll('.k').forEach(b=>{b.classList.remove('kg','ky','kx');const s=keyState[b.dataset.l];if(s)b.classList.add('k'+s)})}
+function submit(){
+  if(over){start();return}
+  if(cur.length<N){msg('کلمه باید ۵ حرف باشه!');return}
+  if(!VALID.has(cur.join(''))){
+    msg('این کلمه تو دیکشنری نیست 🤔');
+    const r=$('board').children[row];r.classList.remove('shake');void r.offsetWidth;r.classList.add('shake');return;
+  }
+  const res=score(cur),cs=cells(),pr={x:1,y:2,g:3};
+  res.forEach((s,i)=>{cs[i].classList.add(s);const l=cur[i];if(!keyState[l]||pr[s]>pr[keyState[l]])keyState[l]=s});
+  paintKeys();
+  if(res.every(s=>s==='g')){
+    save.stars++;save.solved++;save.streak++;
+    const rec=save.streak>save.best;if(rec)save.best=save.streak;
+    persist();over=true;
+    msg('🎉 آفرین! ⭐ | ردیف برد: '+fa(save.streak)+(rec&&save.streak>1?' (رکورد جدید!)':' | رکورد: '+fa(save.best)));
+    $('submit').textContent='بازی بعدی';showStats(true);return;
+  }
+  row++;cur=[];
+  if(row>=T){
+    over=true;const lost=save.streak;save.streak=0;persist();
+    msg('باختی! جواب: '+ans.join('')+(lost>1?' | ردیف برد '+fa(lost)+' سوخت 😢':''));
+    $('submit').textContent='بازی بعدی';showStats();
+  }
+}
+function hint(){
+  if(over)return;
+  if(save.stars<5){msg('ستاره‌ت کمه!');return}
+  const c=[...new Set(ans)].filter(l=>keyState[l]!=='g'&&keyState[l]!=='y');
+  if(!c.length){msg('همه‌ی حروف جواب رو قبلاً پیدا کردی 😄');return}
+  keyState[c[Math.floor(Math.random()*c.length)]]='y';
+  save.stars-=5;persist();paintKeys();showStats();msg('💡 یه حرف درست زرد شد');
+}
+document.addEventListener('keydown',e=>{
+  if(e.ctrlKey||e.metaKey||e.altKey)return;
+  if(e.key==='Enter')submit();
+  else if(e.key==='Backspace')back();
+  else{const c=norm(e.key);if(c.length===1&&LETTERS.includes(c))type(c)}
+});
+$('new').onclick=start;$('submit').onclick=submit;$('hint').onclick=hint;
+start();
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script>
+</body>
+</html>
